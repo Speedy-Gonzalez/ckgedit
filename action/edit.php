@@ -230,6 +230,14 @@ class action_plugin_ckgedit_edit extends DokuWiki_Action_Plugin {
          $useComplexTables=false;
       }
       
+      $text = preg_replace_callback('/~~STET_OPEN~~(.*?)~~STET_CLOSE~~/ms',
+         function ($matches) {
+             $search = array('"',"'", '*', '/', '\\',  '_',  '^',  '&',  '-');
+            $replace = array('STETQstet', 'STETqstet', 'STETSstet','STETFstet','STETBstet','STETUstet','STETCstet','STETAstet','STETHstet') ;
+            return  '~~STET_OPEN~~' . str_replace($search,$replace,$matches[1]) . '~~STET_CLOSE~~';
+         },
+     $text);
+    
       if(strpos($text, '%%') !== false || strpos($text, '\\\\') !== false || strpos($text, '|') !== false ) {  
       $text = preg_replace('/%%\s*<nowiki>\s*%%/ms', 'PERCNWPERC',$text);
       $text = preg_replace('/%%\s*<(code|file)>\s*%%/ms', 'PERC' . "$1" . 'PERC',$text);
